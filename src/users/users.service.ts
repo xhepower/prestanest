@@ -1,27 +1,51 @@
-import { Injectable } from '@nestjs/common';
-
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Between, FindOptionsWhere } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { FilterUsersDto } from './dto/filter-users.dto';
+
 @Injectable()
 export class UsersService {
+  constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
   create(createUserDto: CreateUserDto) {
-    return `/${JSON.stringify(createUserDto)}`;
+    const newUser = this.userRepo.create(createUserDto);
+    return this.userRepo.save(newUser);
   }
 
-  findAll() {
-    return `This action returns all users`;
+  findAll(params?: FilterUsersDto) {
+    const { limit, offset, minDate, maxDate } = params;
+    const where: FindOptionsWhere<User> = {};
+    if (minDate && maxDate) {
+      where.created_at = Between(minDate, maxDate);
+    }
+    return this.userRepo.find({
+      relations: ['rutas'],
+      where,
+      take: limit,
+      skip: offset,
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.userRepo.findOne({
+      where: [{ id }],
+      relations: ['rutas'],
+    });
+    if (!user) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async update(id: number, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    this.userRepo.merge(user, updateUserDto);
+    return this.userRepo.save(user);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} user`;
+    return this.userRepo.delete(id);
   }
 }

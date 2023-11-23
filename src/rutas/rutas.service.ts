@@ -1,26 +1,49 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRutaDto } from './dto/create-ruta.dto';
 import { UpdateRutaDto } from './dto/update-ruta.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Ruta } from './entities/ruta.entity';
+
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class RutasService {
-  create(createRutaDto: CreateRutaDto) {
-    return 'This action adds a new ruta';
+  constructor(
+    @InjectRepository(Ruta) private rutaRepo: Repository<Ruta>,
+    private userService: UsersService,
+  ) {}
+  async create(createRutaDto: CreateRutaDto) {
+    const newRuta = this.rutaRepo.create(createRutaDto);
+    if (+createRutaDto.userId) {
+      const user = await this.userService.findOne(createRutaDto.userId);
+      newRuta.user = user;
+    }
+    return this.rutaRepo.save(newRuta);
   }
 
   findAll() {
-    return `This action returns all rutas`;
+    return this.rutaRepo.find({ relations: ['user'] });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} ruta`;
+  async findOne(id: number) {
+    const ruta = await this.rutaRepo.findOne({
+      where: [{ id }],
+      relations: ['user'],
+    });
+    if (!ruta) {
+      throw new NotFoundException(`Ruta #${id} not found`);
+    }
+    return ruta;
   }
 
-  update(id: number, updateRutaDto: UpdateRutaDto) {
-    return `This action updates a #${id} ruta`;
+  async update(id: number, updateRutaDto: UpdateRutaDto) {
+    const ruta = await this.findOne(id);
+    this.rutaRepo.merge(ruta, updateRutaDto);
+    return this.rutaRepo.save(ruta);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} ruta`;
+    return this.rutaRepo.delete(id);
   }
 }

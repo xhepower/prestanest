@@ -14,6 +14,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ParseItPipe } from 'src/common/parse-it/parse-it.pipe';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+import { FilterUsersDto } from './dto/filter-users.dto';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
@@ -25,10 +26,8 @@ export class UsersController {
   }
   @ApiOperation({ summary: 'Obtener todos los usuarios.' })
   @Get()
-  findAll(@Query() params: any) {
-    const { limit, offset } = params;
-    console.log(limit, offset);
-    return this.usersService.findAll();
+  findAll(@Query() params: FilterUsersDto) {
+    return this.usersService.findAll(params);
   }
   @ApiOperation({ summary: 'Obtener un usuario.' })
   @Get(':id')

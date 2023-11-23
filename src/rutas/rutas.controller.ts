@@ -11,6 +11,7 @@ import { RutasService } from './rutas.service';
 import { CreateRutaDto } from './dto/create-ruta.dto';
 import { UpdateRutaDto } from './dto/update-ruta.dto';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
+
 @ApiTags('rutas')
 @Controller('rutas')
 export class RutasController {
@@ -20,6 +21,7 @@ export class RutasController {
   create(@Body() createRutaDto: CreateRutaDto) {
     return this.rutasService.create(createRutaDto);
   }
+
   @ApiOperation({ summary: 'Obtener todas las rutas' })
   @Get()
   findAll() {

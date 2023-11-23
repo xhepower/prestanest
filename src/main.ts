@@ -8,6 +8,9 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, // Ignorar datos que no esten en los DTO
       forbidNonWhitelisted: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 
