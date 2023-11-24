@@ -8,6 +8,7 @@ import config from './config';
 import { UsersModule } from './users/users.module';
 import { RutasModule } from './rutas/rutas.module';
 import { DatabaseModule } from './database/database.module';
+import { ClientesModule } from './clientes/clientes.module';
 
 @Global()
 @Module({
@@ -25,6 +26,8 @@ import { DatabaseModule } from './database/database.module';
         DATABASE_PORT: Joi.number().required(),
       }),
     }),
+
+    ClientesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

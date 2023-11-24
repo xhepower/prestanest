@@ -21,7 +21,7 @@ export class UsersService {
       where.created_at = Between(minDate, maxDate);
     }
     return this.userRepo.find({
-      relations: ['rutas'],
+      relations: ['rutas.clientes'],
       where,
       take: limit,
       skip: offset,
@@ -31,10 +31,10 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.userRepo.findOne({
       where: [{ id }],
-      relations: ['rutas'],
+      relations: ['rutas.clientes'],
     });
     if (!user) {
-      throw new NotFoundException(`Product #${id} not found`);
+      throw new NotFoundException(`User #${id} not found`);
     }
     return user;
   }

@@ -5,7 +5,7 @@ export class CreateRutaDto {
   @ApiProperty({ description: 'nombre de ruta' })
   @IsNotEmpty()
   name: string;
-  @ApiProperty({ description: 'nombre de ruta' })
+  @ApiProperty({ description: 'id de usuario' })
   @IsNumber()
   @IsPositive()
   @IsNotEmpty()

@@ -6,11 +6,11 @@ export class CreateUserDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
-  @ApiProperty()
+  @ApiProperty({ description: 'password de usuerio' })
   @IsString()
   @IsNotEmpty()
   password: string;
-  @ApiProperty()
+  @ApiProperty({ description: 'Rol de usuario' })
   @IsString()
   @IsNotEmpty()
   role: UserRole;

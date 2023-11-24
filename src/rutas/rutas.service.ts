@@ -2,9 +2,9 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRutaDto } from './dto/create-ruta.dto';
 import { UpdateRutaDto } from './dto/update-ruta.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between, FindOptionsWhere } from 'typeorm';
 import { Ruta } from './entities/ruta.entity';
-
+import { FilterRutasDto } from './dto/filter-ruta-dto';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -22,14 +22,24 @@ export class RutasService {
     return this.rutaRepo.save(newRuta);
   }
 
-  findAll() {
-    return this.rutaRepo.find({ relations: ['user'] });
+  findAll(params?: FilterRutasDto) {
+    const { limit, offset, minDate, maxDate } = params;
+    const where: FindOptionsWhere<Ruta> = {};
+    if (minDate && maxDate) {
+      where.created_at = Between(minDate, maxDate);
+    }
+    return this.rutaRepo.find({
+      relations: ['user', 'clientes'],
+      where,
+      take: limit,
+      skip: offset,
+    });
   }
 
   async findOne(id: number) {
     const ruta = await this.rutaRepo.findOne({
       where: [{ id }],
-      relations: ['user'],
+      relations: ['user', 'clientes'],
     });
     if (!ruta) {
       throw new NotFoundException(`Ruta #${id} not found`);

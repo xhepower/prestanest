@@ -7,7 +7,7 @@ import {
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger/dist';
 
-export class FilterUsersDto {
+export class FilterRutasDto {
   @ApiProperty({ description: 'tamaño de offset' })
   @IsOptional()
   @IsPositive()
@@ -16,11 +16,11 @@ export class FilterUsersDto {
   @IsOptional()
   @Min(0)
   offset: number = 0;
-  @ApiProperty({ description: 'filtro-inicio de fecha' })
+  @ApiProperty({ description: 'inico de fecha-filtro' })
   @IsOptional()
   @IsDate()
   minDate: Date;
-  @ApiProperty({ description: 'filtro-fin de fecha' })
+  @ApiProperty({ description: 'fin de fecha-filtro' })
   @IsOptional()
   @IsDate()
   @ValidateIf((item) => item.minDate)

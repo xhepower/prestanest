@@ -1,3 +1,4 @@
+import { Cliente } from '../../clientes/entities/cliente.entity';
 import { User } from '../../users/entities/user.entity';
 import {
   PrimaryGeneratedColumn,
@@ -7,6 +8,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 @Entity()
 export class Ruta {
@@ -28,4 +30,6 @@ export class Ruta {
   @ManyToOne(() => User, (user) => user.rutas)
   @JoinColumn()
   user: User;
+  @OneToMany(() => Cliente, (cliente) => cliente.ruta)
+  clientes: Cliente[];
 }
