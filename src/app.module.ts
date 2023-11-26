@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { RutasModule } from './rutas/rutas.module';
 import { DatabaseModule } from './database/database.module';
 import { ClientesModule } from './clientes/clientes.module';
+import { PrestamosModule } from './prestamos/prestamos.module';
 
 @Global()
 @Module({
@@ -28,6 +29,8 @@ import { ClientesModule } from './clientes/clientes.module';
     }),
 
     ClientesModule,
+
+    PrestamosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
