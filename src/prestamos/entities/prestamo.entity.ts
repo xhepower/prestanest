@@ -1,4 +1,4 @@
-import { Cliente } from 'src/clientes/entities/cliente.entity';
+import { Cliente } from '../../clientes/entities/cliente.entity';
 import {
   PrimaryGeneratedColumn,
   Column,

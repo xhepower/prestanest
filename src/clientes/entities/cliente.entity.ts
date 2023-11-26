@@ -1,4 +1,4 @@
-import { Prestamo } from 'src/prestamos/entities/prestamo.entity';
+import { Prestamo } from '../../prestamos/entities/prestamo.entity';
 import { Ruta } from '../../rutas/entities/ruta.entity';
 import {
   PrimaryGeneratedColumn,
