@@ -1,3 +1,4 @@
+import { Plazo } from '../../plazos/entities/plazo.entity';
 import { Cliente } from '../../clientes/entities/cliente.entity';
 import {
   PrimaryGeneratedColumn,
@@ -8,16 +9,45 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
+export enum frecuenciaPago {
+  SEMANAL = 'semanal',
+  DIARIO = 'diario',
+  MENSUAL = 'mensual',
+  QUINCENAL = 'quincenal',
+}
+export enum estadoPrestamo {
+  ACTIVO = 'activo',
+  VENCIDO = 'vencido',
+  PAGADO = 'mensual',
+}
 @Entity()
 export class Prestamo {
   @PrimaryGeneratedColumn()
   id: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   capital: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  porcentaje: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  intereses: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  mora: number;
+  @Column({
+    type: 'enum',
+    enum: frecuenciaPago,
+    default: frecuenciaPago.SEMANAL,
+  })
+  frecuencia: frecuenciaPago;
+  @Column({
+    type: 'enum',
+    enum: estadoPrestamo,
+    default: estadoPrestamo.ACTIVO,
+  })
+  estado: estadoPrestamo;
   @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP(6)' })
-  fechaInicio: Date;
+  inicio: Date;
   @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP(6)' })
-  fechaVencimiento: Date;
+  vencimiento: Date;
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
@@ -32,4 +62,7 @@ export class Prestamo {
   @ManyToOne(() => Cliente, (cliente) => cliente.prestamos)
   @JoinColumn()
   cliente: Cliente;
+  @ManyToOne(() => Plazo, (plazo) => plazo.prestamos)
+  @JoinColumn()
+  plazo: Plazo;
 }
