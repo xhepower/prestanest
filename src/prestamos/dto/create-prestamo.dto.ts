@@ -21,12 +21,7 @@ export class CreatePrestamoDto {
   @IsNotEmpty()
   @IsDate()
   inicio: Date;
-  @ApiProperty({ description: 'id de plazo' })
-  @IsNumber()
-  @IsPositive()
-  @IsNotEmpty()
-  plazoId: number;
-  @ApiProperty({ description: 'plazo en dias habiles' })
+  @ApiProperty({ description: 'diario, menusal, quincenal, mensual' })
   @IsOptional()
   frecuencia: string;
 }

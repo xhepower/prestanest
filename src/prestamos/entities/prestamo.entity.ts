@@ -1,4 +1,3 @@
-import { Plazo } from '../../plazos/entities/plazo.entity';
 import { Cliente } from '../../clientes/entities/cliente.entity';
 import {
   PrimaryGeneratedColumn,
@@ -8,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 export enum frecuenciaPago {
   SEMANAL = 'semanal',
@@ -62,7 +62,4 @@ export class Prestamo {
   @ManyToOne(() => Cliente, (cliente) => cliente.prestamos)
   @JoinColumn()
   cliente: Cliente;
-  @ManyToOne(() => Plazo, (plazo) => plazo.prestamos)
-  @JoinColumn()
-  plazo: Plazo;
 }
