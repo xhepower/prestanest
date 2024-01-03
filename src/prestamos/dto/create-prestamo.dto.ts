@@ -6,22 +6,54 @@ import {
   IsDate,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger/dist';
+enum Estado {
+  Activo = 'activo',
+  Moroso = 'moroso',
+  Pagado = 'pagado',
+}
+enum Frecuencia {
+  Diario = 'diario',
+  Semanal = 'semanal',
+  Quincenal = 'quincenal',
+  Mensual = 'mensual',
+}
 export class CreatePrestamoDto {
-  @ApiProperty({ description: 'monto de prestamo' })
+  @ApiProperty({ description: 'capital' })
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   capital: number;
-  @ApiProperty({ description: 'porcentaje de interes (100%)' })
+  @ApiProperty({ description: 'porcentaje' })
   @IsNotEmpty()
   @IsNumber()
   @IsPositive()
   porcentaje: number;
+  @ApiProperty({ description: 'mora' })
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  mora: number;
+  @ApiProperty({ description: 'id de clienbte' })
+  @IsNumber()
+  @IsPositive()
+  @IsNotEmpty()
+  clienteId: number;
   @ApiProperty({ description: 'fecha de inicio' })
   @IsNotEmpty()
   @IsDate()
   inicio: Date;
-  @ApiProperty({ description: 'diario, menusal, quincenal, mensual' })
+  @ApiProperty({ description: 'proxima fecha de pago' })
+  @IsNotEmpty()
+  @IsDate()
+  proxima: Date;
+  @ApiProperty({ description: 'fecha de vencimiento' })
+  @IsNotEmpty()
+  @IsDate()
+  vencimiento: Date;
+  @ApiProperty({ description: 'estado' })
   @IsOptional()
-  frecuencia: string;
+  estado: Estado;
+  @ApiProperty({ description: 'frecuencia' })
+  @IsOptional()
+  frecuencia: Frecuencia;
 }

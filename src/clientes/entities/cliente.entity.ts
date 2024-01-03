@@ -1,5 +1,5 @@
-import { Prestamo } from '../../prestamos/entities/prestamo.entity';
 import { Ruta } from '../../rutas/entities/ruta.entity';
+import { Prestamo } from '../../prestamos/entities/prestamo.entity';
 import {
   PrimaryGeneratedColumn,
   Column,

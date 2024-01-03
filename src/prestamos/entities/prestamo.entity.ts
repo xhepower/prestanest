@@ -9,45 +9,49 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-export enum frecuenciaPago {
-  SEMANAL = 'semanal',
-  DIARIO = 'diario',
-  MENSUAL = 'mensual',
-  QUINCENAL = 'quincenal',
+enum Estado {
+  Activo = 'activo',
+  Moroso = 'moroso',
+  Pagado = 'pagado',
 }
-export enum estadoPrestamo {
-  ACTIVO = 'activo',
-  VENCIDO = 'vencido',
-  PAGADO = 'mensual',
+enum Frecuencia {
+  Diario = 'diario',
+  Semanal = 'semanal',
+  Quincenal = 'quincenal',
+  Mensual = 'mensual',
 }
 @Entity()
 export class Prestamo {
   @PrimaryGeneratedColumn()
   id: number;
+  @Column({ type: 'date', nullable: false })
+  inicio: Date;
+  @Column({ type: 'date', nullable: false })
+  vencimiento: Date;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   capital: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   porcentaje: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
-  intereses: number;
+  cuota: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   mora: number;
   @Column({
-    type: 'enum',
-    enum: frecuenciaPago,
-    default: frecuenciaPago.SEMANAL,
+    type: 'varchar',
+    length: 255,
+    unique: false,
+    default: Estado.Activo,
   })
-  frecuencia: frecuenciaPago;
+  estado: Estado;
   @Column({
-    type: 'enum',
-    enum: estadoPrestamo,
-    default: estadoPrestamo.ACTIVO,
+    type: 'varchar',
+    length: 255,
+    unique: false,
+    default: Frecuencia.Diario,
   })
-  estado: estadoPrestamo;
-  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP(6)' })
-  inicio: Date;
-  @Column({ type: 'date', default: () => 'CURRENT_TIMESTAMP(6)' })
-  vencimiento: Date;
+  frecuencia: Frecuencia;
+  @Column({ type: 'date', nullable: false })
+  proxima: Date;
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',
