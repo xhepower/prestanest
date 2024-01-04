@@ -33,9 +33,15 @@ export class Prestamo {
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   porcentaje: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  porcentajemora: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   cuota: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  intereses: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   mora: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  total: number;
   @Column({
     type: 'varchar',
     length: 255,

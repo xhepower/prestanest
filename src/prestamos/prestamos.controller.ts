@@ -23,9 +23,21 @@ export class PrestamosController {
   create(@Body() createPrestamoDto: CreatePrestamoDto) {
     return this.prestamosService.create(createPrestamoDto);
   }
+  @ApiOperation({ summary: 'Calcular un prestamo' })
   @Post('calculate')
-  calculate(@Body() createPrestamoDto: CreatePrestamoDto) {
-    return this.prestamosService.calculate(createPrestamoDto);
+  calculate(@Body() params) {
+    console.log('calculanding');
+    return this.prestamosService.calculate(params);
+  }
+  @ApiOperation({ summary: 'Disminuir una pago a un prestamo' })
+  @Post('pagar')
+  disminuirPago(@Body() params) {
+    return this.prestamosService.disminuirPago(params.id, params.pago);
+  }
+  @ApiOperation({ summary: 'Verificar y crear mora a un prestamo' })
+  @Post('mora')
+  mora(@Body() params) {
+    return this.prestamosService.crearMora(params.id);
   }
   @ApiOperation({ summary: 'Obtener todos los prestamos' })
   @Get()

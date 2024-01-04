@@ -33,6 +33,16 @@ export class CreatePrestamoDto {
   @IsNumber()
   @IsPositive()
   mora: number;
+  @ApiProperty({ description: 'porcentaje de la mora' })
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  porcentajemora: number;
+  @ApiProperty({ description: 'mora' })
+  @IsOptional()
+  @IsNumber()
+  @IsPositive()
+  total: number;
   @ApiProperty({ description: 'id de clienbte' })
   @IsNumber()
   @IsPositive()
