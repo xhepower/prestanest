@@ -34,10 +34,23 @@ export class PrestamosController {
   disminuirPago(@Body() params) {
     return this.prestamosService.disminuirPago(params.id, params.pago);
   }
-  @ApiOperation({ summary: 'Verificar y crear mora a un prestamo' })
+  @ApiOperation({ summary: 'verificar crear moras' })
   @Post('mora')
   mora(@Body() params) {
     return this.prestamosService.crearMora(params.id);
+  }
+  @ApiOperation({ summary: 'proxima fecha de pago' })
+  @Post('proxima')
+  proxima(@Body() params) {
+    return this.prestamosService.proximaFechapago(
+      params.frecuencia,
+      params.fecha,
+    );
+  }
+  @ApiOperation({ summary: 'proxima fecha de pago' })
+  @Post('actualizar')
+  actualizarTodo() {
+    return this.prestamosService.actualizarTodo();
   }
   @ApiOperation({ summary: 'Obtener todos los prestamos' })
   @Get()

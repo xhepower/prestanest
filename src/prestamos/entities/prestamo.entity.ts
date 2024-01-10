@@ -1,4 +1,6 @@
+import { Pago } from '../../pagos/entities/pago.entity';
 import { Cliente } from '../../clientes/entities/cliente.entity';
+
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -72,4 +74,6 @@ export class Prestamo {
   @ManyToOne(() => Cliente, (cliente) => cliente.prestamos)
   @JoinColumn()
   cliente: Cliente;
+  @OneToMany(() => Pago, (pago) => pago.prestamo)
+  pagos: Pago[];
 }

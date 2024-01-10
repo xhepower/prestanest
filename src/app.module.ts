@@ -10,6 +10,8 @@ import { RutasModule } from './rutas/rutas.module';
 import { DatabaseModule } from './database/database.module';
 import { ClientesModule } from './clientes/clientes.module';
 import { PrestamosModule } from './prestamos/prestamos.module';
+import { PagosModule } from './pagos/pagos.module';
+import { AuthModule } from './auth/auth.module';
 
 @Global()
 @Module({
@@ -31,8 +33,13 @@ import { PrestamosModule } from './prestamos/prestamos.module';
     ClientesModule,
 
     PrestamosModule,
+
+    PagosModule,
+
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [UsersModule],
 })
 export class AppModule {}

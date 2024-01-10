@@ -53,7 +53,7 @@ export class CreatePrestamoDto {
   @IsDate()
   inicio: Date;
   @ApiProperty({ description: 'proxima fecha de pago' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsDate()
   proxima: Date;
   @ApiProperty({ description: 'fecha de vencimiento' })

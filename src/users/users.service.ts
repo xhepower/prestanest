@@ -5,12 +5,14 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { FilterUsersDto } from './dto/filter-users.dto';
-
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class UsersService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
     const newUser = this.userRepo.create(createUserDto);
+    const hashPassword = await bcrypt.hash(newUser.password, 10);
+    newUser.password = hashPassword;
     return this.userRepo.save(newUser);
   }
 
@@ -38,7 +40,9 @@ export class UsersService {
     }
     return user;
   }
-
+  findByEmail(email: string) {
+    return this.userRepo.findOne({ where: { email } });
+  }
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(id);
     this.userRepo.merge(user, updateUserDto);
