@@ -71,9 +71,13 @@ export class Prestamo {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-  @ManyToOne(() => Cliente, (cliente) => cliente.prestamos)
+  @ManyToOne(() => Cliente, (cliente) => cliente.prestamos, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   cliente: Cliente;
-  @OneToMany(() => Pago, (pago) => pago.prestamo)
+  @OneToMany(() => Pago, (pago) => pago.prestamo, {
+    cascade: true,
+  })
   pagos: Pago[];
 }

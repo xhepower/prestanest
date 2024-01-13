@@ -35,6 +35,8 @@ export class User {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-  @OneToMany(() => Ruta, (ruta) => ruta.user)
+  @OneToMany(() => Ruta, (ruta) => ruta.user, {
+    cascade: true,
+  })
   rutas: Ruta[];
 }

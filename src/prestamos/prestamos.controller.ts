@@ -14,6 +14,32 @@ import { CreatePrestamoDto } from './dto/create-prestamo.dto';
 import { UpdatePrestamoDto } from './dto/update-prestamo.dto';
 import { FilterPrestamosDto } from './dto/filter-prestamo.dto';
 import { ParseItPipe } from 'src/common/parse-it/parse-it.pipe';
+import { createInterface } from 'readline';
+export interface CalculateInt {
+  inicio: Date;
+  vencimiento: Date;
+  capital: number;
+  porcentaje: number;
+  frecuencia: Frecuencia;
+}
+export interface createInterface {
+  capital: number;
+  porcentaje: number;
+  porcentajemora: number;
+  inicio: Date;
+  vencimiento: Date;
+  clienteId: number;
+}
+export interface pagoInterface {
+  id: number;
+  pago: number;
+}
+enum Frecuencia {
+  Diario = 'diario',
+  Semanal = 'semanal',
+  Quincenal = 'quincenal',
+  Mensual = 'mensual',
+}
 @ApiTags('prestamos')
 @Controller('prestamos')
 export class PrestamosController {
@@ -21,18 +47,26 @@ export class PrestamosController {
   @ApiOperation({ summary: 'Crear un prestamo.' })
   @Post()
   create(@Body() createPrestamoDto: CreatePrestamoDto) {
+    if (!createPrestamoDto.frecuencia) {
+      createPrestamoDto.frecuencia = Frecuencia.Diario;
+    }
     return this.prestamosService.create(createPrestamoDto);
   }
   @ApiOperation({ summary: 'Calcular un prestamo' })
   @Post('calculate')
   calculate(@Body() params) {
-    console.log('calculanding');
-    return this.prestamosService.calculate(params);
+    const enviar = params as CalculateInt;
+    if (!enviar.frecuencia) {
+      enviar.frecuencia = Frecuencia.Diario;
+    }
+    console.log('enviar', enviar);
+    return this.prestamosService.calculate(enviar);
   }
   @ApiOperation({ summary: 'Disminuir una pago a un prestamo' })
   @Post('pagar')
   disminuirPago(@Body() params) {
-    return this.prestamosService.disminuirPago(params.id, params.pago);
+    const pagar = params as pagoInterface;
+    return this.prestamosService.disminuirPago(pagar.id, pagar.pago);
   }
   @ApiOperation({ summary: 'verificar crear moras' })
   @Post('mora')

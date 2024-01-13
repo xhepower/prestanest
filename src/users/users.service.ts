@@ -22,6 +22,7 @@ export class UsersService {
     if (minDate && maxDate) {
       where.created_at = Between(minDate, maxDate);
     }
+
     return this.userRepo.find({
       relations: ['rutas.clientes'],
       where,

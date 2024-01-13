@@ -22,24 +22,45 @@ export class RutasService {
     return this.rutaRepo.save(newRuta);
   }
 
-  findAll(params?: FilterRutasDto) {
-    const { limit, offset, minDate, maxDate } = params;
+  async findAll(params?: FilterRutasDto) {
+    const { limit, offset, minDate, maxDate, userId } = params;
     const where: FindOptionsWhere<Ruta> = {};
     if (minDate && maxDate) {
       where.created_at = Between(minDate, maxDate);
     }
-    return this.rutaRepo.find({
-      relations: ['user', 'clientes'],
+
+    const rta = await this.rutaRepo.find({
+      join: {
+        alias: 'ruta',
+        leftJoinAndSelect: {
+          clientes: 'ruta.clientes',
+          prestamos: 'clientes.prestamos',
+          pagos: 'prestamos.pagos',
+        },
+      },
       where,
       take: limit,
       skip: offset,
     });
+
+    if (userId) {
+      const usuario = rta.find((u) => u.user.id === +userId);
+      return usuario;
+    }
+    return rta;
   }
 
   async findOne(id: number) {
     const ruta = await this.rutaRepo.findOne({
       where: [{ id }],
-      relations: ['user', 'clientes'],
+      join: {
+        alias: 'ruta',
+        leftJoinAndSelect: {
+          clientes: 'ruta.clientes',
+          prestamos: 'clientes.prestamos',
+          pagos: 'prestamos.pagos',
+        },
+      },
     });
     if (!ruta) {
       throw new NotFoundException(`Ruta #${id} not found`);

@@ -7,6 +7,7 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 
 import { UsersService } from './users.service';
@@ -15,7 +16,12 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { ParseItPipe } from 'src/common/parse-it/parse-it.pipe';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 import { FilterUsersDto } from './dto/filter-users.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/roles.model';
 @ApiTags('users')
+@UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -35,11 +41,13 @@ export class UsersController {
     return this.usersService.findOne(+id);
   }
   @ApiOperation({ summary: 'Modificar un usuario.' })
+  @Roles(Role.ADMIN)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.usersService.update(+id, updateUserDto);
   }
   @ApiOperation({ summary: 'Eliminar un usuario .' })
+  @Roles(Role.ADMIN)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.usersService.remove(+id);

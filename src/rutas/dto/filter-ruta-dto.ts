@@ -6,7 +6,6 @@ import {
   ValidateIf,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger/dist';
-
 export class FilterRutasDto {
   @ApiProperty({ description: 'tamaño de offset' })
   @IsOptional()
@@ -25,4 +24,7 @@ export class FilterRutasDto {
   @IsDate()
   @ValidateIf((item) => item.minDate)
   maxDate: Date;
+  @ApiProperty({ description: 'user' })
+  @IsOptional()
+  userId: string;
 }

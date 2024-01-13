@@ -18,6 +18,13 @@ enum Frecuencia {
   Quincenal = 'quincenal',
   Mensual = 'mensual',
 }
+export interface CalculateInt {
+  inicio: Date;
+  vencimiento: Date;
+  capital: number;
+  porcentaje: number;
+  frecuencia: Frecuencia;
+}
 @Injectable()
 export class PrestamosService {
   constructor(
@@ -26,6 +33,7 @@ export class PrestamosService {
   ) {}
   async create(createPrestamoDto: CreatePrestamoDto) {
     const { intereses, cuota, total } = this.calculate(createPrestamoDto);
+    console.log(intereses, cuota, total);
     const newPrestamo = this.prestamoRepo.create(createPrestamoDto);
     if (+createPrestamoDto.clienteId) {
       const cliente = await this.clienteService.findOne(
@@ -85,7 +93,7 @@ export class PrestamosService {
     if (nuevaCantidad < 5) {
       estado = Estado.Pagado;
     }
-    await this.update(id, { total: nuevaCantidad, estado });
+    await this.update(id, { total: +nuevaCantidad, estado });
   }
   async crearMora(id: number) {
     const prestamo = await this.findOne(id);
@@ -122,11 +130,14 @@ export class PrestamosService {
     });
   }
   calculate(params) {
-    const { inicio, vencimiento, capital, porcentaje, frecuencia } = params;
+    const { inicio, vencimiento, capital, porcentaje, frecuencia } =
+      params as CalculateInt;
+
     let numeroCuotas: number = 0;
-    const intereses = (porcentaje * capital) / 100;
-    const total = capital + intereses;
-    const dias = this.contarDiaSinDomingos(inicio, vencimiento);
+    const intereses: number = (+porcentaje * +capital) / 100;
+    const total: number = capital + intereses;
+    const dias: number = this.contarDiaSinDomingos(inicio, vencimiento);
+    console.log(inicio, vencimiento, capital, porcentaje, frecuencia);
     switch (frecuencia) {
       case Frecuencia.Quincenal:
         numeroCuotas = Math.ceil(dias / 14);
@@ -141,7 +152,7 @@ export class PrestamosService {
     const cuota = total / numeroCuotas;
     return { intereses, cuota, total, numeroCuotas };
   }
-  contarDiaSinDomingos(inicio: Date, vencimiento: Date) {
+  contarDiaSinDomingos(inicio: Date, vencimiento: Date): number {
     let dias = differenceInDays(vencimiento, inicio);
     let fechaActual = inicio;
 

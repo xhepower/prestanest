@@ -25,7 +25,9 @@ export class Pago {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-  @ManyToOne(() => Prestamo, (prestamo) => prestamo.pagos)
+  @ManyToOne(() => Prestamo, (prestamo) => prestamo.pagos, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   prestamo: Prestamo;
 }

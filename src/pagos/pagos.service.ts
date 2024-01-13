@@ -35,7 +35,7 @@ export class PagosService {
       where.created_at = Between(minDate, maxDate);
     }
     return this.pagoRepo.find({
-      relations: ['cliente'],
+      relations: ['prestamo'],
       where,
       take: limit,
       skip: offset,
@@ -45,7 +45,7 @@ export class PagosService {
   async findOne(id: number) {
     const pago = await this.pagoRepo.findOne({
       where: [{ id }],
-      relations: ['cliente'],
+      relations: ['prestamo'],
     });
     if (!pago) {
       throw new NotFoundException(`Pago #${id} not found`);

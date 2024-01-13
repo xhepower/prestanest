@@ -39,9 +39,13 @@ export class Cliente {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-  @ManyToOne(() => Ruta, (ruta) => ruta.clientes)
+  @ManyToOne(() => Ruta, (ruta) => ruta.clientes, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn()
   ruta: Ruta;
-  @OneToMany(() => Prestamo, (prestamo) => prestamo.cliente)
+  @OneToMany(() => Prestamo, (prestamo) => prestamo.cliente, {
+    cascade: true,
+  })
   prestamos: Prestamo[];
 }

@@ -1,7 +1,6 @@
 import { DataSource } from 'typeorm';
 import { config } from 'dotenv';
 import { ConfigService } from '@nestjs/config';
-import InitSeeder from './seeds/init.seeder';
 
 config();
 const configService = new ConfigService();
