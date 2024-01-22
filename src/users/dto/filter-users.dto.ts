@@ -25,3 +25,4 @@ export class FilterUsersDto {
   @ValidateIf((item) => item.minDate)
   maxDate: Date;
 }
+//para guardar
