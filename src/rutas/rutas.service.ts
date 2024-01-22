@@ -24,12 +24,14 @@ export class RutasService {
 
   async findAll(params?: FilterRutasDto) {
     const { limit, offset, minDate, maxDate, userId } = params;
+    console.log(params);
     const where: FindOptionsWhere<Ruta> = {};
     if (minDate && maxDate) {
       where.created_at = Between(minDate, maxDate);
     }
 
     const rta = await this.rutaRepo.find({
+      relations: ['user'],
       join: {
         alias: 'ruta',
         leftJoinAndSelect: {
@@ -44,9 +46,12 @@ export class RutasService {
     });
 
     if (userId) {
+      console.log(userId);
       const usuario = rta.find((u) => u.user.id === +userId);
-      return usuario;
+      console.log(usuario);
+      return usuario ? usuario : [];
     }
+    console.log(rta);
     return rta;
   }
 
