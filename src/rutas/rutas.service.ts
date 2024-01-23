@@ -47,7 +47,7 @@ export class RutasService {
 
     if (userId) {
       console.log(userId);
-      const usuario = rta.find((u) => u.user.id === +userId);
+      const usuario = rta.filter((u) => u.user.id === +userId);
       console.log(usuario);
       return usuario ? usuario : [];
     }
