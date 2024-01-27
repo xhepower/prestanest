@@ -149,6 +149,10 @@ export class PrestamosService {
         numeroCuotas = dias;
         break;
     }
+
+    if (numeroCuotas < 1) {
+      numeroCuotas = 1;
+    }
     const cuota = total / numeroCuotas;
     return { intereses, cuota, total, numeroCuotas };
   }

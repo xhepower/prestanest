@@ -26,17 +26,14 @@ export class CreatePrestamoDto {
   @ApiProperty({ description: 'porcentaje' })
   @IsNotEmpty()
   @IsNumber()
-  @IsPositive()
   porcentaje: number;
   @ApiProperty({ description: 'mora' })
   @IsOptional()
   @IsNumber()
-  @IsPositive()
   mora: number;
   @ApiProperty({ description: 'porcentaje de la mora' })
   @IsOptional()
   @IsNumber()
-  @IsPositive()
   porcentajemora: number;
   @ApiProperty({ description: 'mora' })
   @IsOptional()
