@@ -19,6 +19,8 @@ export class PagosService {
         +createPagoDto.prestamoId,
       );
       newPago.prestamo = prestamo;
+      newPago.saldoAnterior = prestamo.saldo;
+      newPago.saldoActual = prestamo.saldo - newPago.monto;
     }
     const rta = this.pagoRepo.save(newPago);
     await this.prestamoService.disminuirPago(

@@ -44,6 +44,8 @@ export class Prestamo {
   mora: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   total: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  saldo: number;
   @Column({
     type: 'varchar',
     length: 255,

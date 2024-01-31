@@ -14,6 +14,12 @@ export class Pago {
   id: number;
   @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
   monto: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  saldoAnterior: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2, default: 0 })
+  saldoActual: number;
+  @Column({ type: 'date', nullable: false })
+  fecha: Date;
   @CreateDateColumn({
     type: 'timestamp',
     default: () => 'CURRENT_TIMESTAMP(6)',

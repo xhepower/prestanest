@@ -32,8 +32,9 @@ export class PrestamosService {
     private clienteService: ClientesService,
   ) {}
   async create(createPrestamoDto: CreatePrestamoDto) {
-    const { intereses, cuota, total } = this.calculate(createPrestamoDto);
-    console.log(intereses, cuota, total);
+    const { intereses, cuota, total, saldo } =
+      this.calculate(createPrestamoDto);
+
     const newPrestamo = this.prestamoRepo.create(createPrestamoDto);
     if (+createPrestamoDto.clienteId) {
       const cliente = await this.clienteService.findOne(
@@ -45,6 +46,7 @@ export class PrestamosService {
     newPrestamo.cuota = cuota;
     newPrestamo.intereses = intereses;
     newPrestamo.total = total;
+    newPrestamo.saldo = saldo;
     newPrestamo.proxima = this.proximaFechapago(
       newPrestamo.frecuencia,
       newPrestamo.inicio,
@@ -88,12 +90,12 @@ export class PrestamosService {
   async disminuirPago(id: number, pago: number) {
     const prestamo = await this.findOne(id);
     let estado = prestamo.estado;
-    const viejaCantidad = prestamo.total;
-    const nuevaCantidad = viejaCantidad - pago;
-    if (nuevaCantidad < 5) {
+    const viejoSaldo = prestamo.saldo;
+    const nuevoSaldo = viejoSaldo - pago;
+    if (nuevoSaldo < 5) {
       estado = Estado.Pagado;
     }
-    await this.update(id, { total: +nuevaCantidad, estado });
+    await this.update(id, { saldo: +nuevoSaldo, estado });
   }
   async crearMora(id: number) {
     const prestamo = await this.findOne(id);
@@ -101,9 +103,9 @@ export class PrestamosService {
       const { vencimiento } = prestamo;
       if (new Date(vencimiento) < new Date()) {
         const mora = (prestamo.capital * prestamo.porcentajemora) / 100;
-        const total = +prestamo.total + mora;
+        const saldo = +prestamo.saldo + mora;
         const estado = Estado.Moroso;
-        await this.update(id, { mora, total, estado });
+        await this.update(id, { mora, saldo, estado });
       } else {
       }
     }
@@ -128,14 +130,15 @@ export class PrestamosService {
         }
       }
     });
+    return 'OK';
   }
   calculate(params) {
     const { inicio, vencimiento, capital, porcentaje, frecuencia } =
       params as CalculateInt;
 
     let numeroCuotas: number = 0;
-    const intereses: number = (+porcentaje * +capital) / 100;
-    const total: number = capital + intereses;
+    const intereses: number = +((+porcentaje * +capital) / 100).toFixed(2);
+    const total: number = +(capital + intereses).toFixed(2);
     const dias: number = this.contarDiaSinDomingos(inicio, vencimiento);
     console.log(inicio, vencimiento, capital, porcentaje, frecuencia);
     switch (frecuencia) {
@@ -153,8 +156,40 @@ export class PrestamosService {
     if (numeroCuotas < 1) {
       numeroCuotas = 1;
     }
-    const cuota = total / numeroCuotas;
-    return { intereses, cuota, total, numeroCuotas };
+    const cuota = +(total / numeroCuotas).toFixed(2);
+    const saldo = total;
+    return { intereses, cuota, total, numeroCuotas, saldo };
+  }
+  planPago({
+    inicio,
+    vencimiento,
+    capital,
+    porcentaje,
+    frecuencia,
+  }: CalculateInt) {
+    const { intereses, cuota, total, numeroCuotas, saldo } = this.calculate({
+      inicio,
+      vencimiento,
+      capital,
+      porcentaje,
+      frecuencia,
+    });
+    const plan = [];
+    let elSaldo = saldo;
+    let fecha = this.proximaFechapago(frecuencia, inicio);
+    for (let i = 1; i <= numeroCuotas; i++) {
+      const p = {
+        i,
+        fecha,
+        cuota,
+        elSaldo,
+        saldonuevo: +(+elSaldo.toFixed(2) - +cuota.toFixed(2)).toFixed(2),
+      };
+      plan.push(p);
+      elSaldo = +p.saldonuevo.toFixed(2);
+      fecha = this.proximaFechapago(frecuencia, fecha);
+    }
+    return { intereses, cuota, total, numeroCuotas, saldo, plan };
   }
   contarDiaSinDomingos(inicio: Date, vencimiento: Date): number {
     let dias = differenceInDays(vencimiento, inicio);
