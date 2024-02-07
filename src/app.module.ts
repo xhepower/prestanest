@@ -12,6 +12,7 @@ import { ClientesModule } from './clientes/clientes.module';
 import { PrestamosModule } from './prestamos/prestamos.module';
 import { PagosModule } from './pagos/pagos.module';
 import { AuthModule } from './auth/auth.module';
+import { ReportesModule } from './reportes/reportes.module';
 
 @Global()
 @Module({
@@ -37,6 +38,8 @@ import { AuthModule } from './auth/auth.module';
     PagosModule,
 
     AuthModule,
+
+    ReportesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
