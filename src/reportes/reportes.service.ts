@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReporteDto } from './dto/create-reporte.dto';
 import { UpdateReporteDto } from './dto/update-reporte.dto';
+import { PrestamosService } from 'src/prestamos/prestamos.service';
 
 @Injectable()
 export class ReportesService {
+  constructor(private prestamoService: PrestamosService) {}
   create(createReporteDto: CreateReporteDto) {
-    return 'This action adds a new reporte';
+    return this.prestamoService.findAll({
+      minDate: createReporteDto.inicio,
+      maxDate: createReporteDto.final,
+      limit: 10,
+      offset: 0,
+    });
   }
 
   findAll() {

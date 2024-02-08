@@ -211,7 +211,7 @@ export class PrestamosService {
     const { limit, offset, minDate, maxDate } = params;
     const where: FindOptionsWhere<Prestamo> = {};
     if (minDate && maxDate) {
-      where.created_at = Between(minDate, maxDate);
+      where.inicio = Between(minDate, maxDate);
     }
     return this.prestamoRepo.find({
       relations: ['cliente'],
