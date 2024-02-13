@@ -13,8 +13,12 @@ services:
       - pgadmin-data:/var/lib/pgadmin
   postgres:
     image: postgres:14
+    restart: always
     env_file:
       - .env
+    environment:
+      tz: 'gmt-6'
+      pgtz: 'gmt-6'
     ports:
       - '5435:5432'
     volumes:
