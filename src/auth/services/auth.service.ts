@@ -22,7 +22,6 @@ export class AuthService {
     return null;
   }
   generateJWT(user: User) {
-    //console.log(process.env.JWTSECRET);
     const payload = { role: user.role, sub: user.id };
     return {
       acces_token: this.jwtService.sign(payload, {

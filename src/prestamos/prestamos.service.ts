@@ -119,14 +119,12 @@ export class PrestamosService {
         await this.crearMora(prestamo.id);
 
         if (new Date(prestamo.proxima) < new Date()) {
-          //console.log(prestamo.id, new Date(prestamo.proxima) < new Date());
           const proxima = this.proximaFechapago(
             prestamo.frecuencia,
             prestamo.proxima,
           );
           await this.update(prestamo.id, { proxima });
         } else {
-          console.log(prestamo.id, new Date(prestamo.proxima) < new Date());
         }
       }
     });
@@ -140,7 +138,7 @@ export class PrestamosService {
     const intereses: number = +((+porcentaje * +capital) / 100).toFixed(2);
     const total: number = +(capital + intereses).toFixed(2);
     const dias: number = this.contarDiaSinDomingos(inicio, vencimiento);
-    console.log(inicio, vencimiento, capital, porcentaje, frecuencia);
+
     switch (frecuencia) {
       case Frecuencia.Quincenal:
         numeroCuotas = Math.ceil(dias / 14);

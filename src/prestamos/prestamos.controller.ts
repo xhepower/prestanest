@@ -59,7 +59,7 @@ export class PrestamosController {
     if (!enviar.frecuencia) {
       enviar.frecuencia = Frecuencia.Diario;
     }
-    console.log('enviar', enviar);
+
     return this.prestamosService.calculate(enviar);
   }
   @ApiOperation({ summary: 'Plan de un prestamo' })
@@ -69,7 +69,7 @@ export class PrestamosController {
     if (!enviar.frecuencia) {
       enviar.frecuencia = Frecuencia.Diario;
     }
-    console.log('enviar', enviar);
+
     return this.prestamosService.planPago(enviar);
   }
   @ApiOperation({ summary: 'Disminuir una pago a un prestamo' })

@@ -2,17 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { CreateReporteDto } from './dto/create-reporte.dto';
 import { UpdateReporteDto } from './dto/update-reporte.dto';
 import { PrestamosService } from 'src/prestamos/prestamos.service';
+import { PagosService } from 'src/pagos/pagos.service';
 
 @Injectable()
 export class ReportesService {
-  constructor(private prestamoService: PrestamosService) {}
-  create(createReporteDto: CreateReporteDto) {
-    return this.prestamoService.findAll({
+  constructor(
+    private prestamoService: PrestamosService,
+    private pagoService: PagosService,
+  ) {}
+  async create(createReporteDto: CreateReporteDto) {
+    const prestamos = await this.prestamoService.findAll({
       minDate: createReporteDto.inicio,
       maxDate: createReporteDto.final,
-      limit: 10,
+      limit: 0,
       offset: 0,
     });
+    const pagos = await this.pagoService.findAll({
+      minDate: createReporteDto.inicio,
+      maxDate: createReporteDto.final,
+      limit: 0,
+      offset: 0,
+    });
+    return {
+      prestamos,
+      pagos,
+    };
   }
 
   findAll() {

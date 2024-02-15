@@ -24,7 +24,6 @@ export class RutasService {
 
   async findAll(params?: FilterRutasDto) {
     const { limit, offset, minDate, maxDate, userId } = params;
-    console.log(params);
     const where: FindOptionsWhere<Ruta> = {};
     if (minDate && maxDate) {
       where.created_at = Between(minDate, maxDate);
@@ -46,12 +45,11 @@ export class RutasService {
     });
 
     if (userId) {
-      console.log(userId);
       const usuario = rta.filter((u) => u.user.id === +userId);
-      console.log(usuario);
+
       return usuario ? usuario : [];
     }
-    console.log(rta);
+
     return rta;
   }
 
