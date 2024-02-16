@@ -3,6 +3,7 @@ import { CreateReporteDto } from './dto/create-reporte.dto';
 import { UpdateReporteDto } from './dto/update-reporte.dto';
 import { PrestamosService } from 'src/prestamos/prestamos.service';
 import { PagosService } from 'src/pagos/pagos.service';
+import { pagoInterface } from 'src/prestamos/prestamos.controller';
 
 @Injectable()
 export class ReportesService {
@@ -23,9 +24,30 @@ export class ReportesService {
       limit: 0,
       offset: 0,
     });
+    interface prestamoInt {
+      capital: number;
+    }
+    interface pagoInt {
+      monto: number;
+    }
+    const sumaPrestamos: number = prestamos.reduce(
+      (acumulador: number, objeto: prestamoInt) => {
+        return acumulador + Number(objeto.capital);
+      },
+      0,
+    );
+    const sumaPagos: number = pagos.reduce(
+      (acumulador: number, objeto: pagoInt) => {
+        return acumulador + Number(objeto.monto);
+      },
+      0,
+    );
+    console.log(sumaPrestamos);
     return {
       prestamos,
       pagos,
+      sumaPrestamos,
+      sumaPagos,
     };
   }
 

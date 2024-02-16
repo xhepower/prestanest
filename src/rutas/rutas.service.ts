@@ -47,6 +47,13 @@ export class RutasService {
       where,
       take: limit,
       skip: offset,
+      order: {
+        id: 'DESC',
+        clientes: {
+          id: 'desc',
+          prestamos: { id: 'desc', pagos: { id: 'desc' } },
+        },
+      },
     });
 
     if (userId) {
