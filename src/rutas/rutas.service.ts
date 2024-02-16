@@ -30,15 +30,20 @@ export class RutasService {
     }
 
     const rta = await this.rutaRepo.find({
-      relations: ['user'],
-      join: {
-        alias: 'ruta',
-        leftJoinAndSelect: {
-          clientes: 'ruta.clientes',
-          prestamos: 'clientes.prestamos',
-          pagos: 'prestamos.pagos',
-        },
-      },
+      relations: [
+        'user',
+        'clientes',
+        'clientes.prestamos',
+        'clientes.prestamos.pagos',
+      ],
+      // join: {
+      //   alias: 'ruta',
+      //   leftJoinAndSelect: {
+      //     clientes: 'ruta.clientes',
+      //     prestamos: 'clientes.prestamos',
+      //     pagos: 'prestamos.pagos',
+      //   },
+      // },
       where,
       take: limit,
       skip: offset,
