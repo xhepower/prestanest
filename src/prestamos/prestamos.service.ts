@@ -216,6 +216,7 @@ export class PrestamosService {
       where,
       take: limit,
       skip: offset,
+      order: { id: 'desc' },
     });
   }
 

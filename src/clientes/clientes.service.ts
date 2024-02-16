@@ -32,6 +32,7 @@ export class ClientesService {
       where,
       take: limit,
       skip: offset,
+      order: { id: 'desc' },
     });
   }
 

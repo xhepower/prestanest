@@ -41,6 +41,7 @@ export class PagosService {
       where,
       take: limit,
       skip: offset,
+      order: { id: 'desc' },
     });
   }
 
