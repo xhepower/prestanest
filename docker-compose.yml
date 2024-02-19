@@ -1,16 +1,5 @@
 version: '3.3'
 services:
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin4_container
-    restart: always
-    ports:
-      - '8888:80'
-    environment:
-      PGADMIN_DEFAULT_EMAIL: hbuezoss@gmail.com
-      PGADMIN_DEFAULT_PASSWORD: alcancia..89
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
   postgres:
     image: postgres:14
     restart: always
@@ -25,4 +14,3 @@ services:
       - ./postgres_data:/var/lib/postgresql/mydata
 volumes:
   postgres_data: {}
-  pgadmin-data:
