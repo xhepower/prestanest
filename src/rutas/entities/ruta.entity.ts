@@ -27,7 +27,7 @@ export class Ruta {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updated_at: Date;
-  @ManyToOne(() => User, (user) => user.rutas, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.rutas, { onUpdate: 'CASCADE' })
   @JoinColumn()
   user: User;
   @OneToMany(() => Cliente, (cliente) => cliente.ruta, { cascade: true })

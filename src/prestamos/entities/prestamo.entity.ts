@@ -74,7 +74,7 @@ export class Prestamo {
   })
   public updated_at: Date;
   @ManyToOne(() => Cliente, (cliente) => cliente.prestamos, {
-    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   cliente: Cliente;

@@ -40,7 +40,7 @@ export class Cliente {
   })
   public updated_at: Date;
   @ManyToOne(() => Ruta, (ruta) => ruta.clientes, {
-    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   ruta: Ruta;

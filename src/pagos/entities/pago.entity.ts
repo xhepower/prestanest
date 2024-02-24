@@ -32,7 +32,7 @@ export class Pago {
   })
   public updated_at: Date;
   @ManyToOne(() => Prestamo, (prestamo) => prestamo.pagos, {
-    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   prestamo: Prestamo;
